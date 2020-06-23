@@ -168,7 +168,7 @@
 
         
         <a href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/" class="archive-article-date">
-  	<time datetime="2020-06-23T09:03:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-23</time>
+  	<time datetime="2020-06-23T09:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-23</time>
 </a>
         
       </header>
@@ -180,9 +180,488 @@
 <li>反射机制是Java语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。</li>
 <li>动态代理是一种方便运行时动态构建代理、动态处理代理方法调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）。实现动态代理的方式很多，比如JDK自身提供的动态代理，就是主要利用了上面提到的反射机制。还有其他的实现方式，比如利用传说中更高性能的字节码操作机制，类似ASM、cglib（基于ASM）、Javassist等。</li>
 </ul>
-        
-          <a class="article-more-a" href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/#more">more >></a>
-        
+<h4 id="关于反射"><a href="#关于反射" class="headerlink" title="关于反射"></a>关于反射</h4><p>反射最大的作用之一就在于我们可以不在编译时知道某个对象的类型，而在运行时通过提供完整的”包名+类名.class”得到。注意：不是在编译时，而是在运行时。</p>
+<p><strong>(1) 功能：</strong></p>
+<ul>
+<li>在运行时能判断任意一个对象所属的类。</li>
+<li>在运行时能构造任意一个类的对象。</li>
+<li>在运行时判断任意一个类所具有的成员变量和方法。</li>
+<li>在运行时调用任意一个对象的方法。 </li>
+</ul>
+<p>说大白话就是，利用Java反射机制我们可以加载一个运行时才得知名称的class，获悉其构造方法，并生成其对象实体，能对其felds设值并唤起其methods。</p>
+<p><strong>(2) 应用场景：</strong><br>反射技术常用在各类通用框架开发中。因为为了保证框架的通用性，需要根据配置文件加载不同的对象或类，并调用不同的方法，这个时候就会用到反射——运行时动态加载需要加载的对象。</p>
+<p><strong>(3)特点：</strong><br>由于反射会额外消耗一定的系统资源，因此如果不需要动态地创建一个对象，那么就不需要用反射。另外，反射调用方法时可以忽略权限检查，因此可能会破坏封装性而导致安全问题。</p>
+<h4 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h4><p>为其他对象提供一种代理以控制对这个对象的访问。在某些情况下，一个对象不适合或者不能直接引用另一个对象，而代理对象可以在两者之间起到中介的作用（可类比房屋中介，房东委托中介销售房屋、签订合同等）。所谓动态代理，就是实现阶段不用关心代理谁，而是在运行阶段才指定代理哪个一个对象（不确定性）。如果是自己写代理类的方式就是静态代理（确定性）。<br><strong>(1)组成要素：</strong><br>(动态)代理模式主要涉及三个要素：</p>
+<ul>
+<li>抽象类接口</li>
+<li>被代理类（具体实现抽象接口的类）</li>
+<li>动态代理类：实际调用被代理类的方法和属性的类</li>
+</ul>
+<p><strong>(2) 实现方式:</strong><br>实现动态代理的方式很多，比如 JDK 自身提供的动态代理，就是主要利用了反射机制。还有其他的实现方式，比如利用字节码操作机制，类似 ASM、CGLIB（基于 ASM）、Javassist 等。举例，常可采用的JDK提供的动态代理接口InvocationHandler来实现动态代理类。其中invoke方法是该接口定义必须实现的，它完成对真实方法的调用。通过InvocationHandler接口，所有方法都由该Handler来进行处理，即所有被代理的方法都由InvocationHandler接管实际的处理任务。此外，我们常可以在invoke方法实现中增加自定义的逻辑实现，实现对被代理类的业务逻辑无侵入。</p>
+<h3 id="2-注解"><a href="#2-注解" class="headerlink" title="2. 注解"></a>2. 注解</h3><h4 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h4><p>Annontation 是 Java5 开始引入的新特征，中文名称叫注解。它提供了一种安全的类似注释的机制，用来<strong>将任何的信息或元数据（metadata）与程序元素（类、方法、成员变量等）进行关联</strong>。为程序的元素（类、方法、成员变量）加上更直观更明了的说明，这些说明信息是与程序的业务逻辑无关，并且供指定的工具或框架使用。Annontation 像一种修饰符一样，应用于包、类型、构造方法、方法、成员变量、参数及本地变量的声明语句中。</p>
+<p>Java 注解是附加在代码中的一些元信息，用于一些工具在编译、运行时进行解析和使用，起到说明、配置的功能。注解不会也不能影响代码的实际逻辑，仅仅起到辅助性的作用。包含在 <code>java.lang.annotation</code> 包中。</p>
+<p>简单来说：注解其实就是<strong>代码中的特殊标记</strong>，这些标记可以<strong>在编译、类加载、运行时被读取，并执行相对应的处理</strong>。</p>
+<h4 id="为什么要用注解"><a href="#为什么要用注解" class="headerlink" title="为什么要用注解"></a>为什么要用注解</h4><p>传统的方式，我们是通过配置文件 <code>.xml</code> 来告诉类是如何运行的。有了注解技术以后，我们就可以通过注解告诉类如何运行。例如：我们以前编写 Servlet 的时候，需要在 web.xml 文件配置具体的信息。我们使用了注解以后，可以直接在 Servlet 源代码上，增加注解…Servlet 就被配置到 Tomcat 上了。也就是说，注解可以给类、方法上注入信息。明显地可以看出，这样是非常直观的，并且 Servlet 规范是推崇这种配置方式的。</p>
+<h4 id="基本Annotation"><a href="#基本Annotation" class="headerlink" title="基本Annotation"></a>基本Annotation</h4><p>在 java.lang 包下存在着5个基本的 Annotation，重点掌握前三个</p>
+<ol>
+<li>@Override 重写注解</li>
+<li>@Deprecated 过时注解</li>
+<li>@SuppressWarnings 抑制编译器警告注解</li>
+<li>@SafeVarargs Java 7“堆污染”警告<ul>
+<li>什么是堆污染呢？？当把一个不是泛型的集合赋值给一个带泛型的集合的时候，这种情况就很容易发生堆污染。</li>
+<li>这个注解也是用来抑制编译器警告的注解，用的地方并不多。</li>
+</ul>
+</li>
+<li>@FunctionalInterface 用来指定该接口是函数式接口<ul>
+<li>用该注解显示指定该接口是一个函数式接口</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-泛型"><a href="#3-泛型" class="headerlink" title="3. 泛型"></a>3. 泛型</h3><h4 id="什么是泛型"><a href="#什么是泛型" class="headerlink" title="什么是泛型"></a>什么是泛型</h4><p>通俗的讲，泛型就是操作类型的 占位符，即：假设占位符为 T，那么此次声明的数据结构操作的数据类型为T类型。假定我们有这样一个需求：写一个排序方法，能够对整型数组、字符串数组甚至其他任何类型的数组进行排序，该如何实现？答案是可以使用 <strong>Java 泛型</strong>。</p>
+<p>使用 Java 泛型的概念，我们可以写一个泛型方法来对一个对象数组排序。然后，调用该泛型方法来对整型数组、浮点数数组、字符串数组等进行排序。</p>
+<h4 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h4><p>你可以写一个泛型方法，该方法在调用时可以接收不同类型的参数。根据传递给泛型方法的参数类型，编译器适当地处理每一个方法调用。</p>
+<p>下面是定义泛型方法的规则：</p>
+<ul>
+<li>所有泛型方法声明都有一个类型参数声明部分（由尖括号分隔），该类型参数声明部分在方法返回类型之前（在下面例子中的</li>
+<li>每一个类型参数声明部分包含一个或多个类型参数，参数间用逗号隔开。一个泛型参数，也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。</li>
+<li>类型参数能被用来声明返回值类型，并且能作为泛型方法得到的实际参数类型的占位符。</li>
+<li>泛型方法体的声明和其他方法一样。注意类型参数 <strong>只能代表引用型类型，不能是原始类型</strong> （像 int,double,char 的等）。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericMethodTest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="comment">// 泛型方法 printArray                         </span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> &lt; E &gt; <span class="function"><span class="keyword">void</span> <span class="title">printArray</span><span class="params">( E[] inputArray )</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      <span class="comment">// 输出数组元素            </span></span><br><span class="line">         <span class="keyword">for</span> ( E element : inputArray )&#123;        </span><br><span class="line">            System.out.printf( <span class="string">"%s "</span>, element );</span><br><span class="line">         &#125;</span><br><span class="line">         System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String args[] )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 创建不同类型数组： Integer, Double 和 Character</span></span><br><span class="line">        Integer[] intArray = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> &#125;;</span><br><span class="line">        Double[] doubleArray = &#123; <span class="number">1.1</span>, <span class="number">2.2</span>, <span class="number">3.3</span>, <span class="number">4.4</span> &#125;;</span><br><span class="line">        Character[] charArray = &#123; <span class="string">'H'</span>, <span class="string">'E'</span>, <span class="string">'L'</span>, <span class="string">'L'</span>, <span class="string">'O'</span> &#125;;</span><br><span class="line"></span><br><span class="line">        System.out.println( <span class="string">"整型数组元素为:"</span> );</span><br><span class="line">        printArray( intArray  ); <span class="comment">// 传递一个整型数组</span></span><br><span class="line"></span><br><span class="line">        System.out.println( <span class="string">"\n双精度型数组元素为:"</span> );</span><br><span class="line">        printArray( doubleArray ); <span class="comment">// 传递一个双精度型数组</span></span><br><span class="line"></span><br><span class="line">        System.out.println( <span class="string">"\n字符型数组元素为:"</span> );</span><br><span class="line">        printArray( charArray ); <span class="comment">// 传递一个字符型数组</span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h4><p>泛型类的声明和非泛型类的声明类似，除了在类名后面添加了类型参数声明部分。</p>
+<p>和泛型方法一样，泛型类的类型参数声明部分也包含一个或多个类型参数，参数间用逗号隔开。一个泛型参数，也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。因为他们接受一个或多个参数，这些类被称为参数化的类或参数化的类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T t;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Box&lt;Integer&gt; integerBox = <span class="keyword">new</span> Box&lt;Integer&gt;();</span><br><span class="line">        Box&lt;String&gt; stringBox = <span class="keyword">new</span> Box&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">        integerBox.add(<span class="keyword">new</span> Integer(<span class="number">10</span>));</span><br><span class="line">        stringBox.add(<span class="keyword">new</span> String(<span class="string">"菜鸟教程"</span>));</span><br><span class="line"></span><br><span class="line">        System.out.printf(<span class="string">"整型值为 :%d\n\n"</span>, integerBox.get());</span><br><span class="line">        System.out.printf(<span class="string">"字符串为 :%s\n"</span>, stringBox.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Lambda表达式"><a href="#4-Lambda表达式" class="headerlink" title="4. Lambda表达式"></a><strong>4. Lambda表达式</strong></h3><h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p>lambda 表达式的语法格式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(parameters) -&gt; expression</span><br><span class="line">或</span><br><span class="line">(parameters) -&gt; &#123; statements; &#125;Click to copy</span><br></pre></td></tr></table></figure>
+
+<p>以下是 lambda 表达式的重要特征:</p>
+<ul>
+<li><strong>可选类型声明：</strong>不需要声明参数类型，编译器可以统一识别参数值。</li>
+<li><strong>可选的参数圆括号：</strong>一个参数无需定义圆括号，但多个参数需要定义圆括号。</li>
+<li><strong>可选的大括号：</strong>如果主体包含了一个语句，就不需要使用大括号。</li>
+<li><strong>可选的返回关键字：</strong>如果主体只有一个表达式返回值则编译器会自动返回值，大括号需要指定明表达式返回了一个数值。</li>
+</ul>
+<p>“Lambda 表达式”(lambda expression)是一个匿名函数，Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数，即没有函数名的函数。Java 8的一个大亮点是引入Lambda表达式，使用它设计的代码会更加简洁。当开发者在编写Lambda表达式时，也会随之被编译成一个函数式接口。下面这个例子就是使用Lambda语法来代替匿名的内部类，代码不仅简洁，而且还可读。</p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><blockquote>
+<p>不采用Lambda的老方法</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Runnable runnable1 = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Running without Lambda"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用Lambda</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Runnable runnable2 = () -&gt; System.out.println(<span class="string">"Running from Lambda"</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-字符串常量池"><a href="#5-字符串常量池" class="headerlink" title="5. 字符串常量池"></a>5. 字符串常量池</h3><p>Java 中字符串对象创建有两种形式，一种为字面量形式，如 <code>String str = &quot;abc&quot;;</code>，另一种就是使用 new 这种标准的构造对象的方法，如 <code>String str = new String(&quot;abc&quot;);</code>，这两种方式我们在代码编写时都经常使用，尤其是字面量的方式。然而<strong>这两种实现其实存在着一些性能和内存占用的差别</strong>。这一切都是源于 JVM 为了减少字符串对象的重复创建，其维护了一个特殊的内存，这段内存被成为<strong>字符串常量池</strong>或者<strong>字符串字面量池</strong>。</p>
+<h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>当代码中出现字面量形式创建字符串对象时，JVM首先会对这个字面量进行检查，如果字符串常量池中存在相同内容的字符串对象的引用，则将这个引用返回，否则新的字符串对象被创建，然后将这个引用放入字符串常量池，并返回该引用。</p>
+<blockquote>
+<p>true<br>false<br>false</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String s1 = <span class="string">"abc"</span>;</span><br><span class="line">        String s2 = <span class="string">"abc"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 以上两个局部变量都存在了常量池中</span></span><br><span class="line">        System.out.println(s1 == s2); </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// new出来的对象不会放到常量池中,内存地址是不同的</span></span><br><span class="line">        String s3 = <span class="keyword">new</span> String();</span><br><span class="line">        String s4 = <span class="keyword">new</span> String();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 字符串的比较不可以使用双等号,这样会比较内存地址</span></span><br><span class="line"><span class="comment">         * 字符串比较应当用equals,可见String重写了equals</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        System.out.println(s3 == s4); </span><br><span class="line">        System.out.println(s3.equals(s4)); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、面向对象"><a href="#二、面向对象" class="headerlink" title="二、面向对象"></a>二、面向对象</h2><h3 id="1-四大基本特征："><a href="#1-四大基本特征：" class="headerlink" title="1. 四大基本特征："></a>1. 四大基本特征：</h3><h4 id="抽象"><a href="#抽象" class="headerlink" title="抽象"></a>抽象</h4><p>现实生活中的事物被抽象成对象，把具有相同属性和行为的对象被抽象成类，再从具有相同属性和行为的类中抽象出父类。 </p>
+<p><img src="/.com//1565338290358.png" alt="1565338290358"></p>
+<h4 id="封装："><a href="#封装：" class="headerlink" title="封装："></a>封装：</h4><p>利用抽象数据类型将数据和基于数据的操作封装在一起，使其构成一个不可分割的独立实体。数据被保护在抽象数据类型的内部，尽可能地隐藏内部的细节，只保留一些对外接口使之与外部发生联系。用户无需知道对象内部的细节，但可以通过对象对外提供的接口来访问该对象。</p>
+<p>优点：</p>
+<ul>
+<li>减少耦合：可以独立地开发、测试、优化、使用、理解和修改</li>
+<li>减轻维护的负担：可以更容易被程序员理解，并且在调试的时候可以不影响其他模块</li>
+<li>提高软件的可重用性</li>
+<li>降低了构建大型系统的⻛险：即使整个系统不可用，但是这些独立的模块却有可能是可用的</li>
+</ul>
+<h4 id="继承："><a href="#继承：" class="headerlink" title="继承："></a>继承：</h4><p>⾯向对象编程 (OOP)语⾔的一个主要功能就是“继承”。继承是指这样一种能⼒：它可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展。</p>
+<h4 id="多态："><a href="#多态：" class="headerlink" title="多态："></a>多态：</h4><p>多态性指允许不同对象对同一消息作出不同的响应。</p>
+<p>多态的实现：</p>
+<p><strong>(1) 方法重载</strong>（overload）：实现的是编译时的多态性（也称为前绑定），它是根据参数列表的不同来区分不同的函数，通过编译之后会变成两个不同的函数。<br><strong>(2) 方法重写</strong>（override）：也叫覆盖，实现的是运行时的多态性（也称为向后绑定）。在方法覆盖中，子类可以覆盖父类的方法，因此同类的方法会在父类与子类中有着不同的表现形式。基类的引用变量不仅可以指向基类的实例对象，也可以指向其子类中的实例对象。同样，接口中的引用变量也可以指向其实现类的实例对象。而程序调用的方法在运行时期才动态绑定（绑定是指将一个方法调用和一个方法主体联系在一起），绑定的是引用变量所指向的具体实例对象的方法，也就是内存中正在运行的那个对象的方法，而不是引用变量的类型中定义的方法。指向子类的父类引用由于向上转型了，它只能访问父类中拥有的方法和属性，而对于子类中存在而父类中不存在的方法，该引用是不能使用的。通过这种动态绑定实现了多态。</p>
+<h3 id="2-重载和重写"><a href="#2-重载和重写" class="headerlink" title="2. 重载和重写"></a>2. 重载和重写</h3><ul>
+<li><strong>重载</strong>：重载发生在同一个类中，同名的方法如果有不同的参数列表（参数类型不同、参数个数不同或者二者都不同）则视为重载。</li>
+<li><strong>重写</strong>：重写发生在子类与父类之间，重写要求子类被重写方法与父类被重写方法有相同的返回类型，比父类被重写方法更好访问，不能比父类被重写方法声明更多的异常（里氏代换原则）。根据不同的子类对象确定调用的那个方法</li>
+</ul>
+<h3 id="3-基本原则"><a href="#3-基本原则" class="headerlink" title="3. 基本原则"></a>3. 基本原则</h3><h4 id="S-O-L-I-D原则。"><a href="#S-O-L-I-D原则。" class="headerlink" title="S.O.L.I.D原则。"></a>S.O.L.I.D原则。</h4><ul>
+<li>单一职责（Single Responsibility），类或者对象最好是只有单一职责，在程序设计中如果发现某个类承担着多种义务，可以考虑进行拆分。</li>
+<li>开关原则（Open-Close, Open for extension, close for modifcation），设计要对扩展开放，对修改关闭。换句话说，程序设计应保证平滑的扩展性，尽量避免因为新增同类功能而修改已有实现，这样可以少产出些回归（regression）问题。</li>
+<li>里氏替换（Liskov Substitution），这是面向对象的基本要素之一，进行继承关系抽象时，凡是可以用父类或者基类的地方，都可以用子类替换。</li>
+<li>接口分离（Interface Segregation），我们在进行类和接口设计时，如果在一个接口里定义了太多方法，其子类很可能面临两难，就是只有部分方法对它是有意义的，这就破坏了程序的内聚性。对于这种情况，可以通过拆分成功能单一的多个接口，将行为进行解耦。在未来维护中，如果某个接口设计有变，不会对使用其他接口的子类构成影响。</li>
+<li>依赖反转（Dependency Inversion），实体应该依赖于抽象而不是实现。也就是说高层次模块，不应该依赖于低层次模块，而是应该基于抽象。实践这一原则是保证产品代码之间适当耦合度的法宝。</li>
+</ul>
+<h4 id="其他原则"><a href="#其他原则" class="headerlink" title="其他原则"></a>其他原则</h4><ul>
+<li>合成聚和复用：优先使用聚合或合成关系复用代码</li>
+<li>面向接口编程</li>
+<li>优先使用组合，而非继承</li>
+<li>一个类需要的数据应该隐藏在类的内部</li>
+<li>类之间应该零耦合，或者只有传导耦合，换句话说，类之间要么没关系，要么只使用另一个类的接口提供的操作</li>
+<li>在水平方向上尽可能统一地分布系统功能</li>
+</ul>
+<h3 id="4-组合、继承和代理"><a href="#4-组合、继承和代理" class="headerlink" title="4. 组合、继承和代理"></a>4. 组合、继承和代理</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><ul>
+<li>组合：在新类中 new 另外一个类的对象，以添加该对象的特性。</li>
+<li>继承：从基类继承得到子类，获得父类的特性。</li>
+<li>代理：在代理类中创建某功能的类，调用类的一些方法以获得该类的部分特性。</li>
+</ul>
+<h4 id="使用场合"><a href="#使用场合" class="headerlink" title="使用场合"></a>使用场合</h4><ul>
+<li><p>组合：各部件之间没什么关系，只需要组合即可。例如组装电脑，需要 new CPU(),new RAM(),new Disk()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Computer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Computer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        CPU cpu=<span class="keyword">new</span> CPU();</span><br><span class="line">        RAM ram=<span class="keyword">new</span> RAM();</span><br><span class="line">        Disk disk=<span class="keyword">new</span> Disk();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CPU</span></span>&#123;    &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RAM</span></span>&#123;    &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Disk</span></span>&#123;    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>继承：子类需要具有父类的功能，各子类之间有所差异。例如 Shape 类作为父类，子类有 Rectangle，CirCle，Triangle……代码不写了，大家都经常用。</p>
+</li>
+<li><p>代理：飞机控制类，我不想暴露太多飞机控制的功能，只需部分前进左右转的控制（而不需要暴露发射导弹功能）。通过在代理类中 new 一个飞机控制对象，然后在方法中添加飞机控制类的各个需要暴露的功能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaneDelegation</span></span>&#123;    </span><br><span class="line">    <span class="keyword">private</span> PlaneControl planeControl;    <span class="comment">//private外部不可访问</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 飞行员权限代理类，普通飞行员不可以开火</span></span><br><span class="line">    PlaneDelegation()&#123;</span><br><span class="line">        planeControl = <span class="keyword">new</span> PlaneControl();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">speed</span><span class="params">()</span></span>&#123;</span><br><span class="line">        planeControl.speed();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">left</span><span class="params">()</span></span>&#123;</span><br><span class="line">        planeControl.left();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">right</span><span class="params">()</span></span>&#123;</span><br><span class="line">        planeControl.right();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaneControl</span> </span>&#123;<span class="comment">// final表示不可继承，控制器都能继承那还得了</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">speed</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">fire</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">left</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">right</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="三、关键字"><a href="#三、关键字" class="headerlink" title="三、关键字"></a>三、关键字</h2><h3 id="1-static、ﬁnal"><a href="#1-static、ﬁnal" class="headerlink" title="1. static、ﬁnal"></a>1. static、ﬁnal</h3><h4 id="static"><a href="#static" class="headerlink" title="static"></a>static</h4><ul>
+<li><p>修饰变量：静态变量（类变量）是在类加载时被创建并初始化，只被创建一次（类加载只进行一次），可以被修改。静态变量是属于整个类的变量而不是属于某个对象的。注意不能把任何方法体内的变量声明为静态。</p>
+</li>
+<li><p>修饰方法：类加载的时候就存在，可以直接通过类名调用，不能用abstract修饰。静态方法只能被静态方法覆盖，非静态方法只能被非静态方法覆盖。java中的main方法必须写成static的，在类加载时无法创建对象，因为静态方法可以不通过对象调用，所以在类的main方法所在在类加载时就可以通过main方法入口来运行程序。</p>
+</li>
+<li><p>修饰代码块：静态代码块在类加载时执行，且只执行一次。<br>执行顺序：父类静态代码块&gt;子类静态代码块&gt;父类非静态代码块&gt;父类构造器&gt;子类非静态代码块&gt;子类构造器</p>
+<p>注：静态方法它们仅能调用其他的static方法，只能访问static数据，它们不能以任何方式引用this或super.在一个static方法或static代码块中引用任何实例变量都是非法的。</p>
+<p>记：任何类（static）的方法或代码块不能访问对象（实例）的变量。反过来，对象（实例）的方法或代码块可以访问类变量。因为类变量是所有对象共有的。特别地，非静态代码块不能为静态常量初始化。</p>
+</li>
+</ul>
+<h4 id="ﬁnal"><a href="#ﬁnal" class="headerlink" title="ﬁnal"></a>ﬁnal</h4><ul>
+<li><p>修饰变量：被ﬁnal修饰的变量必须要初始化，初始化后不可更改。初始化可以以三种方式：</p>
+<p><strong>(1）定义时初始化</strong></p>
+<p><strong>(2）在构造器中设置值</strong>(针对实例变量)</p>
+<p><strong>(3）在代码块中为ﬁnal变量设置值</strong>(类变量用静态代码块，实例变量用非静态代码块)<br>这⾥不可改变的意思对基本类型来说是其值不可变，而对于引用类型变量来说是不能再指向其他的对象。</p>
+</li>
+<li><p>修饰方法：被ﬁnal修饰的方法不能其子类覆盖（重写）</p>
+</li>
+<li><p>修饰类：不能被继承（类中的所有成员方法都被隐式地指定为ﬁnal方法。）</p>
+</li>
+</ul>
+<h3 id="2-break、continue、return"><a href="#2-break、continue、return" class="headerlink" title="2. break、continue、return"></a>2. break、continue、return</h3><h4 id="break"><a href="#break" class="headerlink" title="break"></a>break</h4><p>跳出当前循环；但是如果是嵌套循环，则只能跳出当前的这一层循环，只有逐层 break 才能跳出所有循环。</p>
+<blockquote>
+<p>0 1 2 3 4 5</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="comment">// 在执行i==6时强制终止循环，i==6不会被执行</span></span><br><span class="line">    <span class="keyword">if</span> (i == <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    System.out.println(i);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h4><p>终止当前循环，但是不跳出循环（在循环中 continue 后面的语句是不会执行了），继续往下根据循环条件执行循环。</p>
+<blockquote>
+<p>0 1 2 3 4 5 7 8 9</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;  </span><br><span class="line">    <span class="comment">// i==6不会被执行，而是被中断了    </span></span><br><span class="line">    <span class="keyword">if</span> (i == <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    System.out.println(i);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="return"><a href="#return" class="headerlink" title="return"></a>return</h4><ul>
+<li>return 从当前的方法中退出，返回到该调用的方法的语句处，继续执行。</li>
+<li>return 返回一个值给调用该方法的语句，返回值的数据类型必须与方法的声明中的返回值的类型一致。</li>
+<li>return 后面也可以不带参数，不带参数就是返回空，其实主要目的就是用于想中断函数执行，返回调用函数处。</li>
+</ul>
+<p>特别注意：返回值为 void 的方法，从某个判断中跳出，必须用 return。</p>
+<h3 id="3-assert"><a href="#3-assert" class="headerlink" title="3. assert"></a>3. assert</h3><p>断言（assert）作为一种软件调试的方法，提供了一种在代码中进行正确性检查的机制，目前很多开发语言都支持这种机制。</p>
+<p>在实现中，assertion 就是在程序中的一条语句，它对一个 boolean 表达式进行检查，一个正确程序必须保证这个 boolean 表达式的值为 true；如果该值为 false，说明程序已经处于不正确的状态下，系统将给出警告并且退出。一般来说，assertion 用于保证程序最基本、关键的正确性。<strong>assertion 检查通常在开发和测试时开启</strong>。为了提高性能，<strong>在软件发布后，assertion 检查通常是关闭的</strong>。下面简单介绍一下 Java 中 assertion 的实现。</p>
+<p>　　在语法上，为了支持 assertion，Java 增加了一个关键字 assert。它包括两种表达式，分别如下：</p>
+<ul>
+<li>assert &lt;boolean表达式&gt;</li>
+</ul>
+<p>　　如果 &lt;boolean表达式&gt; 为 true，则程序继续执行。</p>
+<p>　　如果为 false，则程序抛出 AssertionError，并终止执行。</p>
+<ul>
+<li>assert &lt;boolean表达式&gt; : &lt;错误信息表达式&gt;</li>
+</ul>
+<p>　　如果 &lt;boolean表达式&gt; 为 true，则程序继续执行。</p>
+<p>　　如果为 false，则程序抛出 java.lang.AssertionError，并输入&lt;错误信息表达式&gt;。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"123"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">assert</span> a == b; <span class="comment">//需显示开启，默认为不开启状态 </span></span><br><span class="line">    <span class="keyword">assert</span> a == b : <span class="string">"执行失败！"</span>;</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"1234"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>assert 的应用范围很多，主要包括：</p>
+<ul>
+<li>检查控制流</li>
+<li>检查输入参数是否有效</li>
+<li>检查函数结果是否有效</li>
+<li>检查程序不变</li>
+</ul>
+<h3 id="4-volatile"><a href="#4-volatile" class="headerlink" title="4. volatile"></a>4. volatile</h3><p>volatile 是一个<strong>类型修饰符</strong>（type specifier），它是被设计用来修饰被不同线程访问和修改的变量。在使用 volatile 修饰成员变量后，所有线程在任何时间所看到变量的值都是相同的。此外，使用 volatile 会组织编译器对代码的优化，因此会降低程序的执行效率。所以，除非迫不得已，否则，能不使用 volatile 就尽量不要使用 volatile。</p>
+<ul>
+<li>每次访问变量时，总是获取主内存的最新值</li>
+<li>每次修改变量后，立刻写回到主内存中</li>
+</ul>
+<h3 id="5-transient"><a href="#5-transient" class="headerlink" title="5. transient"></a>5. transient</h3><p>我们都知道一个对象只要实现了 Serilizable 接口，这个对象就可以被序列化，Java 的这种序列化模式为开发者提供了很多便利，我们可以不必关系具体序列化的过程，只要这个类实现了 Serilizable 接口，这个类的所有属性和方法都会自动序列化。</p>
+<p>然而在实际开发过程中，我们常常会遇到这样的问题，这个类的有些属性需要序列化，而其他属性不需要被序列化，打个比方，如果一个用户有一些敏感信息（如密码，银行卡号等），为了安全起见，不希望在网络操作（主要涉及到序列化操作，本地序列化缓存也适用）中被传输，这些信息对应的变量就可以加上 transient 关键字。换句话说，这个字段的生命周期仅存于调用者的内存中而不会写到磁盘里持久化。</p>
+<p><strong>总之，Java 的 transient 关键字为我们提供了便利，你只需要实现 Serilizable 接口，将不需要序列化的属性前添加关键字transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。</strong></p>
+<h2 id="四、基本数据类型"><a href="#四、基本数据类型" class="headerlink" title="四、基本数据类型"></a>四、基本数据类型</h2><h3 id="1-Java的基本数据类型和引用类型，自动装箱和拆箱"><a href="#1-Java的基本数据类型和引用类型，自动装箱和拆箱" class="headerlink" title="1. Java的基本数据类型和引用类型，自动装箱和拆箱"></a>1. Java的基本数据类型和引用类型，自动装箱和拆箱</h3><h4 id="4-类-8-种基本数据类型。"><a href="#4-类-8-种基本数据类型。" class="headerlink" title="4 类 8 种基本数据类型。"></a>4 类 8 种基本数据类型。</h4><p>4 整数型，2 浮点型，1 布尔型，1 字符型</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">存储</th>
+<th align="left">取值范围</th>
+<th align="left">默认值</th>
+<th align="left">包装类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>整数型</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">byte</td>
+<td align="left">8</td>
+<td align="left">最大存储数据量是 255，最小 -27，最大 27-1， [-128~127]</td>
+<td align="left">(byte) 0</td>
+<td align="left">Byte</td>
+</tr>
+<tr>
+<td align="left">short</td>
+<td align="left">16</td>
+<td align="left">最大数据存储量是 65536，[-215,215-1]， [-32768,32767]，±3万</td>
+<td align="left">(short) 0</td>
+<td align="left">Short</td>
+</tr>
+<tr>
+<td align="left">int</td>
+<td align="left">32</td>
+<td align="left">最大数据存储容量是 231-1， [-231,231-1]，±21亿，[ -2147483648, 2147483647]</td>
+<td align="left">0</td>
+<td align="left">Integer</td>
+</tr>
+<tr>
+<td align="left">long</td>
+<td align="left">64</td>
+<td align="left">最大数据存储容量是 264-1， [-263,263-1]， ±922亿亿（±（922+16个零））</td>
+<td align="left">0L</td>
+<td align="left">Long</td>
+</tr>
+<tr>
+<td align="left"><strong>浮点型</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">float</td>
+<td align="left">32</td>
+<td align="left">数据范围在 3.4e-45~1.4e38，直接赋值时必须在数字后加上 f 或 F</td>
+<td align="left">0.0f</td>
+<td align="left">Float</td>
+</tr>
+<tr>
+<td align="left">double</td>
+<td align="left">64</td>
+<td align="left">数据范围在 4.9e-324~1.8e308，赋值时可以加 d 或 D 也可以不加</td>
+<td align="left">0.0d</td>
+<td align="left">Double</td>
+</tr>
+<tr>
+<td align="left"><strong>布尔型</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">boolean</td>
+<td align="left">1</td>
+<td align="left">true / flase</td>
+<td align="left">false</td>
+<td align="left">Boolean</td>
+</tr>
+<tr>
+<td align="left"><strong>字符型</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">char</td>
+<td align="left">16</td>
+<td align="left">存储 Unicode 码，用单引号赋值</td>
+<td align="left">‘\u0000’ (null)</td>
+<td align="left">Character</td>
+</tr>
+</tbody></table>
+<h4 id="自动装箱和拆箱"><a href="#自动装箱和拆箱" class="headerlink" title="自动装箱和拆箱"></a>自动装箱和拆箱</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// jdk 1.5</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer m =<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> i = m;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码在 jdk1.4 以后的版本都不会报错，它实现了自动拆装箱的功能，如果是 jdk1.4，就得这样写了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// jdk 1.4</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer b = <span class="keyword">new</span> Integer(<span class="number">210</span>);</span><br><span class="line">        <span class="keyword">int</span> c = b.intValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-位运算符"><a href="#2-位运算符" class="headerlink" title="2. 位运算符"></a>2. 位运算符</h3><p>Java 定义了位运算符，应用于整数类型 (int)，长整型 (long)，短整型 (short)，字符型 (char)，和字节型 (byte)等类型。</p>
+<p>下表列出了位运算符的基本运算，假设整数变量A的值为60和变量B的值为13</p>
+<p>A（60）：0011 1100</p>
+<p>B（13）：0000 1101</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作符</th>
+<th align="left">名称</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">＆</td>
+<td align="left">与</td>
+<td align="left">如果相对应位都是 1，则结果为 1，否则为 0</td>
+<td align="left">（A＆B）得到 12，即 0000 1100</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">或</td>
+<td align="left">如果相对应位都是 0，则结果为 0，否则为 1</td>
+<td align="left">（A|B）得到 61，即 0011 1101</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">异或</td>
+<td align="left">如果相对应位值相同，则结果为 0，否则为 1</td>
+<td align="left">（A^B）得到49，即 0011 0001</td>
+</tr>
+<tr>
+<td align="left">〜</td>
+<td align="left">非</td>
+<td align="left">按位取反运算符翻转操作数的每一位，即 0 变成 1，1 变成 0</td>
+<td align="left">（〜A）得到-61，即1100 0011</td>
+</tr>
+<tr>
+<td align="left">&lt;&lt;</td>
+<td align="left">左移</td>
+<td align="left">（左移一位乘2）按位左移运算符。左操作数按位左移右操作数指定的位数。左移 n 位表示原来的值乘 2n</td>
+<td align="left">A &lt;&lt; 2得到240，即 1111 0000</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;</td>
+<td align="left">右移</td>
+<td align="left">（右移一位除2）有符号右移，按位右移运算符。左操作数按位右移右操作数指定的位数</td>
+<td align="left">A &gt;&gt; 2得到15即 1111</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;&gt;</td>
+<td align="left">无符号右移</td>
+<td align="left">无符号右移，按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充</td>
+<td align="left">A&gt;&gt;&gt;2得到15即0000 1111</td>
+</tr>
+</tbody></table>
+<h3 id="3-运算技巧"><a href="#3-运算技巧" class="headerlink" title="3.运算技巧"></a>3.运算技巧</h3><h4 id="不用额外变量交换两个整数的值"><a href="#不用额外变量交换两个整数的值" class="headerlink" title="不用额外变量交换两个整数的值"></a>不用额外变量交换两个整数的值</h4><p>如果给定整数 a 和 b，用以下三行代码即可交换 a 和b 的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = a ^ b;</span><br><span class="line">b = a ^ b;</span><br><span class="line">a = a ^ b;Click to copy</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>假设 a 异或 b 的结果记为 c，</p>
+<p>c 就是 a 整数位信息和 b 整数位信息的所有不同信息</p>
+<p>。</p>
+</li>
+<li><p>a 异或 c 的结果就是 b，比如：a = 4 = 100，c = 111，a^c = 011 = 3 = b</p>
+</li>
+<li><p>b 异或c 的结果就是 a，比如：b = 3 = 011，c = 111，b^c = 100 = 4 = a</p>
+</li>
+</ul>
+<p>说明：位运算的题目基本上都带有靠经验积累才会做的特征，也就是准备阶段需要做足够多的题，面试时才会有良好的感觉。</p>
+<h4 id="不使用运算符进行a-b操作"><a href="#不使用运算符进行a-b操作" class="headerlink" title="不使用运算符进行a+b操作"></a>不使用运算符进行a+b操作</h4><ul>
+<li>a^b; 得到不含进位之和</li>
+<li>(a &amp; b)&lt;&lt;1; 进位</li>
+<li>只要进位不为零，则迭代；否则返回</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c = a &amp; b;</span><br><span class="line">    <span class="keyword">int</span> r = a ^ b;</span><br><span class="line">    <span class="keyword">if</span>(c == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> add(r, c &lt;&lt; <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argn, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    printf(<span class="string">"sum = %d\n"</span>, add(-<span class="number">10000</span>, <span class="number">56789</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、字符串"><a href="#五、字符串" class="headerlink" title="五、字符串"></a>五、字符串</h2><h3 id="1-String-StringBuffer-StringBuilder"><a href="#1-String-StringBuffer-StringBuilder" class="headerlink" title="1. String/StringBuffer/StringBuilder"></a>1. String/StringBuffer/StringBuilder</h3><p>问题：Java的字符串，String、StringBuffer、StringBuilder有什么区别？<br>典型回答：</p>
+<ul>
+<li>String是Java语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。</li>
+<li>StringBuffer是为解决上面提到拼接产生太多中间对象的问题而提供的一个类，我们可以用append或者add方法，把字符串添加到已有序列的末尾或者指定位置。StringBuffer本质是一个线程安全的可修改字符序列，它保证了线程安全，也随之带来了额外的性能开销，所以除非有线程安全的需要，不然还是推荐使用它的后继者，也就是StringBuilder。</li>
+<li>StringBuilder是Java 1.5中新增的，在能力上和StringBuffer没有本质区别，但是它去掉了线程安全的部分，有效减小了开销，是绝大部分情况下进行字符串拼接的首选。</li>
+</ul>
+<h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p><strong>(1) String的创建机理</strong><br>由于String在Java世界中使用过于频繁，Java为了避免在一个系统中产生大量的String对象，引入了字符串常池。其运行机制是：创建一个字符串时，首先检查池中是否有值相同的字符串对象，如果有则不需要创建直接从池中刚查找到的对象引用；如果没有则新建字符串对象，返回对象引用，并且将新创建的对象放入池中。但是，通过new方法创建的String对象是不检查字符串池的，而是直接在堆区或栈区创建一个新的对象，也不会把对象放入池中。上述原则只适用于通过直接量给String对象引用赋值的情况。举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="string">"123"</span>; <span class="comment">//通过直接量赋值方式，放入字符串常量池</span></span><br><span class="line">String str2 = <span class="keyword">new</span> String(“<span class="number">123</span>”);<span class="comment">//通过new方式赋值方式，不放入字符串常量池</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：String提供了inter()方法。调用该方法时，如果常量池中包括了一个等于此String对象的字符串（由equals方法确定），则返回池中的字符串。否则，将此String对象添加到池中，并且返回此池中对象的引用。</p>
+<p><strong>(2) String的特性</strong></p>
+<ul>
+<li>不可变。是指String对象一旦生成，则不能再对它进行改变。不可变的主要作用在于当一个对象需要被多线程共享，并且访问频繁时，可以省略同步和锁等待的时间，从而大幅度提高系统性能。不可变模式是一个可以提高多线程程序的性能，降低多线程程序复杂度的设计模式。</li>
+<li>针对常量池的优化。当2个String对象拥有相同的值时，他们只引用常量池中的同一个拷贝。当同一个字符串反复出现时，这个技术可以大幅度节省内存空间。</li>
+</ul>
+<h4 id="StringBuffer、StringBuilder"><a href="#StringBuffer、StringBuilder" class="headerlink" title="StringBuffer、StringBuilder"></a>StringBuffer、StringBuilder</h4><p>StringBuffer和StringBuilder都实现了AbstractStringBuilder抽象类，拥有几乎一致对外提供的调用接口；其底层在内存中的存储方式与String相同，都是以一个有序的字符序列（char类型的数组）进行存储，不同点是StringBuffer/StringBuilder对象的值是可以改变的，并且值改变以后，对象引用不会发生改变;两者对象在构造过程中，首先按照默认大小申请一个字符数组，由于会不断加入新数据，当超过默认大小后，会创建一个更大的数组，并将原先的数组内容复制过来，再丢弃旧的数组。因此，对于较大对象的扩容会涉及大量的内存复制操作，如果能够预先评估大小，可提升性能。唯一需要注意的是：</p>
+<ul>
+<li>StringBuffer是线程安全的</li>
+<li>StringBuilder是线程不安全的。</li>
+</ul>
+<p>可参看Java标准类库的源代码，StringBuffer类中方法定义前面都会有synchronize关键字。为此，StringBuffer的性能要远低于StringBuilder。</p>
+<p><strong>应用场景</strong></p>
+<ul>
+<li>在字符串内容不经常发生变化的业务场景优先使用String类。例如：常量声明、少量的字符串拼接操作等。如果有大量的字符串内容拼接，避免使用String与String之间的“+”操作，因为这样会产生大量无用的中间对象，耗费空间且执行效率低下（新建对象、回收对象花费大量时间）。</li>
+<li>在频繁进行字符串的运算（如拼接、替换、删除等），并且运行在多线程环境下，建议使用StringBuffer，例如XML解析、HTTP参数解析与封装。</li>
+<li>在频繁进行字符串的运算（如拼接、替换、删除等），并且运行在单线程环境下，建议使用StringBuilder，例如SQL语句拼装、JSON封装等。</li>
+</ul>
+<p><strong>StringBuffer 常用方法</strong></p>
+<p>public StringBuffer append(String s)  将指定的字符串追加到此字符序列。</p>
+<p>public StringBuffer reverse()  将此字符序列用其反转形式取代。</p>
+<p>char charAt(int index)  返回此序列中指定索引处的 char 值。</p>
+<p>int indexOf(String str)  返回第一次出现的指定子字符串在该字符串中的索引。</p>
+<p>String substring(int start, int end)<br>返回一个新的 String，它包含此序列当前所包含的字符子序列。（不包含end）</p>
+<h3 id="String有重写Object的hashcode和toString吗？"><a href="#String有重写Object的hashcode和toString吗？" class="headerlink" title="String有重写Object的hashcode和toString吗？"></a>String有重写Object的hashcode和toString吗？</h3><ul>
+<li>String 有重写 Object 的 hashcode 和 toString</li>
+</ul>
+<p>当 equals 方法被重写时，通常有必要重写 hashCode 方法，以维护 hashCode 方法的常规协定，该协定声明相对等的两个对象必须有相同的 hashCode</p>
+<ul>
+<li>object1.euqal(object2) 时为 true， object1.hashCode() == object2.hashCode() 为 true</li>
+<li>object1.hashCode() == object2.hashCode() 为 false 时，object1.euqal(object2) 必定为 false</li>
+<li>object1.hashCode() == object2.hashCode() 为 true时，但 object1.euqal(object2) 不一定定为 true</li>
+</ul>
+<h4 id="重写-equals-不重写-hashcode-会出现什么问题"><a href="#重写-equals-不重写-hashcode-会出现什么问题" class="headerlink" title="重写 equals 不重写 hashcode 会出现什么问题"></a>重写 equals 不重写 hashcode 会出现什么问题</h4><p>在存储散列集合时(如 Set 类)，如果原对象.equals(新对象)，但没有对 hashCode 重写，即两个对象拥有不同的 hashCode，则在集合中将会存储两个值相同的对象，从而导致混淆。因此在重写 equals 方法时，必须重写 hashCode 方法。</p>
+<h2 id="六、Object通用方法"><a href="#六、Object通用方法" class="headerlink" title="六、Object通用方法"></a>六、Object通用方法</h2><p>以下为 Object 中的通用方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> Class&lt;?&gt; getClass()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;&#125; <span class="comment">// JVM内存回收之finalize()方法Click to copy</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="equals"><a href="#equals" class="headerlink" title="equals()"></a>equals()</h4><p><strong>1. equals() 与 == 的区别</strong></p>
+<ul>
+<li>对于基本类型，== 判断两个值是否相等，基本类型没有 equals() 方法。</li>
+<li>对于引用类型，== 判断两个实例是否引用同一个对象，而 equals() 判断引用的对象是否等价。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Integer x = <span class="keyword">new</span> Integer(<span class="number">1</span>);</span><br><span class="line">Integer y = <span class="keyword">new</span> Integer(<span class="number">1</span>);</span><br><span class="line">System.out.println(x.equals(y)); <span class="comment">// true</span></span><br><span class="line">System.out.println(x == y);      <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 等价关系</strong></p>
+<p>(1) 自反性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.equals(x); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>(2) 对称性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.equals(y) == y.equals(x); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>(3) 传递性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (x.equals(y) &amp;&amp; y.equals(z))</span><br><span class="line">    x.equals(z); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>(4) 一致性</p>
+<p>多次调用 equals() 方法结果不变</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.equals(y) == x.equals(y); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>(5) 与 null 的比较</p>
+<p>对任何不是 null 的对象 x 调用 x.equals(null) 结果都为 false</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.euqals(<span class="keyword">null</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 实现</strong></p>
+<ul>
+<li>检查是否为同一个对象的引用，如果是直接返回 true；</li>
+<li>检查是否是同一个类型，如果不是，直接返回 false；</li>
+<li>将 Object 实例进行转型；</li>
+<li>判断每个关键域是否相等。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EqualExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> y;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> z;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">EqualExample</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">        <span class="keyword">this</span>.z = z;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == o) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        EqualExample that = (EqualExample) o;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (x != that.x) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (y != that.y) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">return</span> z == that.z;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode()"></a>hashCode()</h4><p>hasCode() 返回散列值，而 equals() 是用来判断两个实例是否等价。<strong>等价的两个实例散列值一定要相同，但是散列值相同的两个实例不一定等价。</strong></p>
+<p>在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个实例散列值也相等。</p>
+<p>下面的代码中，新建了两个等价的实例，并将它们添加到 HashSet 中。我们希望将这两个实例当成一样的，只在集合中添加一个实例，但是因为 EqualExample 没有实现 hasCode() 方法，因此这两个实例的散列值是不同的，最终导致集合添加了两个等价的实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">EqualExample e1 = <span class="keyword">new</span> EqualExample(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">EqualExample e2 = <span class="keyword">new</span> EqualExample(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">System.out.println(e1.equals(e2)); <span class="comment">// true</span></span><br><span class="line">HashSet&lt;EqualExample&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">set.add(e1);</span><br><span class="line">set.add(e2);</span><br><span class="line">System.out.println(set.size());   <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<p>理想的散列函数应当具有均匀性，即不相等的实例应当均匀分布到所有可能的散列值上。这就要求了散列函数要把所有域的值都考虑进来，可以将每个域都当成 R 进制的某一位，然后组成一个 R 进制的整数。R 一般取 31，因为它是一个奇素数，如果是偶数的话，当出现乘法溢出，信息就会丢失，因为与 2 相乘相当于向左移一位。</p>
+<p>一个数与 31 相乘可以转换成移位和减法：<code>31\*x == (x&lt;&lt;5)-x</code>，编译器会自动进行这个优化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">17</span>;</span><br><span class="line">    result = <span class="number">31</span> * result + x;</span><br><span class="line">    result = <span class="number">31</span> * result + y;</span><br><span class="line">    result = <span class="number">31</span> * result + z;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;Click to copy</span><br></pre></td></tr></table></figure>
+
+<h4 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString()"></a>toString()</h4><p>默认返回 ToStringExample@4554617c 这种形式，其中 @ 后面的数值为<strong>散列码的无符号十六进制</strong>表示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToStringExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> number;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ToStringExample</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.number = number;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;Click to copy</span><br><span class="line">ToStringExample example = <span class="keyword">new</span> ToStringExample(<span class="number">123</span>);</span><br><span class="line">System.out.println(example.toString());Click to copy</span><br><span class="line">ToStringExample@<span class="number">4554617</span>cClick to copy</span><br></pre></td></tr></table></figure>
+
+<h4 id="clone"><a href="#clone" class="headerlink" title="clone()"></a>clone()</h4><p><strong>1. cloneable</strong></p>
+<p>clone() 是 Object 的 protect 方法，它不是 public，一个类不显式去重写 clone()，其它类就不能直接去调用该类实例的 clone() 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CloneExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> b;</span><br><span class="line">&#125;Click to copy</span><br><span class="line">CloneExample e1 = <span class="keyword">new</span> CloneExample();</span><br><span class="line"><span class="comment">// CloneExample e2 = e1.clone(); // 'clone()' has protected access in 'java.lang.Object'Click to copy</span></span><br></pre></td></tr></table></figure>
+
+<p>重写 clone() 得到以下实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CloneExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> b;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> CloneExample <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (CloneExample)<span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;Click to copy</span><br><span class="line">CloneExample e1 = <span class="keyword">new</span> CloneExample();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    CloneExample e2 = e1.clone();</span><br><span class="line">&#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;Click to copy</span><br><span class="line">java.lang.CloneNotSupportedException: CloneTestClick to copy</span><br></pre></td></tr></table></figure>
+
+<p>以上抛出了 CloneNotSupportedException，这是因为 CloneTest 没有实现 Cloneable 接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CloneExample</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> b;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;Click to copy</span><br></pre></td></tr></table></figure>
+
+<p>应该注意的是，clone() 方法并不是 Cloneable 接口的方法，而是 Object 的一个 protected 方法。Cloneable 接口只是规定，如果一个类没有实现 Cloneable 接口又调用了 clone() 方法，就会抛出CloneNotSupportedException。</p>
+
       
 
       
