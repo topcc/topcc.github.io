@@ -6,18 +6,40 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>咕咕子的博客</title>
+  <title>Java并发 | 咕咕子的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="武汉大学计算机学院研究生">
-<meta property="og:type" content="website">
-<meta property="og:title" content="咕咕子的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="一、并发编程1. 线程状态转换 新建（New）新建线程对象，并没有调用start()方法之前可能正在运行，也可能正在等待 CPU 时间⽚。 运行（Runnable）包含了操作系统线程状态中的 Running 和 Ready。 阻塞（Blocking）等待获取一个排它锁，如果其线程释放了锁就会结束此状态。 无限期等待（Waiting）等待其它线程显式地唤醒，否则不会被分配 CPU 时间⽚。    进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发">
+<meta property="og:url" content="http://yoursite.com/2020/06/23/Java%E5%B9%B6%E5%8F%91/index.html">
 <meta property="og:site_name" content="咕咕子的博客">
-<meta property="og:description" content="武汉大学计算机学院研究生">
+<meta property="og:description" content="一、并发编程1. 线程状态转换 新建（New）新建线程对象，并没有调用start()方法之前可能正在运行，也可能正在等待 CPU 时间⽚。 运行（Runnable）包含了操作系统线程状态中的 Running 和 Ready。 阻塞（Blocking）等待获取一个排它锁，如果其线程释放了锁就会结束此状态。 无限期等待（Waiting）等待其它线程显式地唤醒，否则不会被分配 CPU 时间⽚。    进">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/06/23/Java%E5%B9%B6%E5%8F%91/1536767960941-1592906630688.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/CountdownLatch.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/23/Java%E5%B9%B6%E5%8F%91/Semaphore-1592906630688.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/23/Java%E5%B9%B6%E5%8F%91/CyclicBarrier-1592906630688.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/1195582-20180508173147029-1341787720.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/v2-4015322359279c5568263aeb7f41c36d.jpg">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/1135283-20170403195814660-1521573510.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/536c6dfd-305a-4b95-b12c-28ca5e8aa043.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/33-1534150864535.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/single-thread-rule-1534148720379.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/monitor-lock-rule-1534148737603.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/volatile-variable-rule-1534148747964.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/thread-start-rule-1534148760654.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/thread-join-rule-1534148774041.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/bb6a49be-00f2-4f27-a0ce-4ed764bc605c-1534158631668.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/051e436c-0e46-4c59-8f67-52d89d656182-1534158643175.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/baaa681f-7c52-4198-a5ae-303b9386cf47-1534158703049.png">
+<meta property="og:image" content="https://frank-lam.github.io/fullstack-tutorial/assets/390c913b-5f31-444f-bbdb-2b88b688e7ce-1534158712253.jpg">
+<meta property="article:published_time" content="2020-06-23T09:55:49.000Z">
+<meta property="article:modified_time" content="2020-06-23T10:04:15.758Z">
 <meta property="article:author" content="咕咕子">
-<meta property="article:tag" content="JavaWeb">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/23/Java%E5%B9%B6%E5%8F%91/1536767960941-1592906630688.png">
   
     <link rel="alternative" href="/atom.xml" title="咕咕子的博客" type="application/atom+xml">
   
@@ -153,16 +175,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Java并发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Java并发" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/23/Java%E5%B9%B6%E5%8F%91/">Java并发</a>
+    <h1 class="article-title" itemprop="name">
+      Java并发
     </h1>
   
 
@@ -780,16 +800,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/06/23/Java%E5%B9%B6%E5%8F%91/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/06/23/Java%E5%B9%B6%E5%8F%91/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/23/Java%E9%9B%86%E5%90%88/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java集合</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -809,738 +888,14 @@
 
 
 
-
-  
-    <article id="post-Java集合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/23/Java%E9%9B%86%E5%90%88/">Java集合</a>
-    </h1>
-  
-
-        
-        <a href="/2020/06/23/Java%E9%9B%86%E5%90%88/" class="archive-article-date">
-  	<time datetime="2020-06-23T09:50:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Java集合框架提供了数据持有对象的方式，提供了对数据集合的操作。Java 集合框架位于 <code>java.util</code> 包下，主要有三个大类：<strong>Collection(接口)</strong>、<strong>Map(接口)</strong>、<strong>集合工具类</strong>。</p>
-<h3 id="1-框架图"><a href="#1-框架图" class="headerlink" title="1. 框架图"></a>1. 框架图</h3><p><img src="/2020/06/23/Java%E9%9B%86%E5%90%88/1565342139370.png" alt="1565342139370"></p>
-        
-          <a class="article-more-a" href="/2020/06/23/Java%E9%9B%86%E5%90%88/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">面试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/06/23/Java%E9%9B%86%E5%90%88/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
-    </h1>
-  
-
-        
-        <a href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/" class="archive-article-date">
-  	<time datetime="2020-06-23T08:54:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、基本概念"><a href="#一、基本概念" class="headerlink" title="一、基本概念"></a>一、基本概念</h2><h3 id="1-反射机制和动态代理"><a href="#1-反射机制和动态代理" class="headerlink" title="1. 反射机制和动态代理"></a>1. 反射机制和动态代理</h3><p>问题：谈谈Java反射机制，动态代理是基于什么原理？<br>典型回答：</p>
-<ul>
-<li>反射机制是Java语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。</li>
-<li>动态代理是一种方便运行时动态构建代理、动态处理代理方法调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）。实现动态代理的方式很多，比如JDK自身提供的动态代理，就是主要利用了上面提到的反射机制。还有其他的实现方式，比如利用传说中更高性能的字节码操作机制，类似ASM、cglib（基于ASM）、Javassist等。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">面试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Eureka服务注册源码分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">Eureka服务注册源码分析</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="archive-article-date">
-  	<time datetime="2019-12-22T07:37:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Eureka-server对外提供Restful的服务，只要利用这些Restful我们就能对项目实现注册和发现。Eureka已经帮我使用java写了client，让我的项目只要依赖client就能实现注册和发现。</p>
-        
-          <a class="article-more-a" href="/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Eureka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-搭建Eureka服务集群" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/">搭建Eureka服务集群</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/" class="archive-article-date">
-  	<time datetime="2019-12-14T05:06:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、创建Eureka服务中心Server端"><a href="#一、创建Eureka服务中心Server端" class="headerlink" title="一、创建Eureka服务中心Server端"></a>一、创建Eureka服务中心Server端</h2><h3 id="1-创建Module命名为eureka-server-0X并添加相应包"><a href="#1-创建Module命名为eureka-server-0X并添加相应包" class="headerlink" title="1. 创建Module命名为eureka_server_0X并添加相应包"></a>1. 创建Module命名为eureka_server_0X并添加相应包</h3>
-        
-          <a class="article-more-a" href="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Eureka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Centos7恢复防火墙" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/17/Centos7%E6%81%A2%E5%A4%8D%E9%98%B2%E7%81%AB%E5%A2%99/">Centos7恢复防火墙</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/17/Centos7%E6%81%A2%E5%A4%8D%E9%98%B2%E7%81%AB%E5%A2%99/" class="archive-article-date">
-  	<time datetime="2019-10-17T03:24:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-查看防火墙状态"><a href="#1-查看防火墙状态" class="headerlink" title="1. 查看防火墙状态"></a>1. 查看防火墙状态</h1><p>通过<code>firewall-cmd --state</code>查看防火墙状态</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# firewall-cmd --state</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File "/usr/bin/firewall-cmd", line 24, in &lt;module&gt;</span><br><span class="line">    from gi.repository import GObject</span><br><span class="line">ImportError: No module named gi.repository</span><br></pre></td></tr></table></figure>
-
-<p>提示找不到gi.repository 库</p>
-        
-          <a class="article-more-a" href="/2019/10/17/Centos7%E6%81%A2%E5%A4%8D%E9%98%B2%E7%81%AB%E5%A2%99/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/17/Centos7%E6%81%A2%E5%A4%8D%E9%98%B2%E7%81%AB%E5%A2%99/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-修改Docker默认存储位置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/25/%E4%BF%AE%E6%94%B9Docker%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/">修改Docker默认存储位置</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/25/%E4%BF%AE%E6%94%B9Docker%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/" class="archive-article-date">
-  	<time datetime="2019-06-25T02:37:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-关闭-Docker"><a href="#1-关闭-Docker" class="headerlink" title="1. 关闭 Docker"></a>1. 关闭 Docker</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service docker stop</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-创建挂载点"><a href="#2-创建挂载点" class="headerlink" title="2. 创建挂载点"></a>2. 创建挂载点</h2><p>将磁盘挂载到dockerdata上 (详情见<a href="https://topcc.github.io/2019/06/25/Linux磁盘分区和挂载/" target="_blank" rel="noopener">Linux磁盘分区和挂载</a>)</p>
-        
-          <a class="article-more-a" href="/2019/06/25/%E4%BF%AE%E6%94%B9Docker%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/25/%E4%BF%AE%E6%94%B9Docker%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux磁盘分区和挂载" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/25/Linux%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%92%8C%E6%8C%82%E8%BD%BD/">Linux磁盘分区和挂载</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/25/Linux%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%92%8C%E6%8C%82%E8%BD%BD/" class="archive-article-date">
-  	<time datetime="2019-06-25T02:14:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-查看磁盘信息"><a href="#1-查看磁盘信息" class="headerlink" title="1. 查看磁盘信息"></a>1. 查看磁盘信息</h2><h3 id="df"><a href="#df" class="headerlink" title="df"></a>df</h3><blockquote>
-<p>列出文件系统的整体磁盘使用量</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -h</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>查看当前目录挂载磁盘</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -h .</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/06/25/Linux%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%92%8C%E6%8C%82%E8%BD%BD/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/25/Linux%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%92%8C%E6%8C%82%E8%BD%BD/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-重装Python2-7-yum" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/12/%E9%87%8D%E8%A3%85Python2-7-yum/">重装Python2.7+yum</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/12/%E9%87%8D%E8%A3%85Python2-7-yum/" class="archive-article-date">
-  	<time datetime="2019-06-12T07:21:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-删除现有的Python和yum"><a href="#1-删除现有的Python和yum" class="headerlink" title="1.删除现有的Python和yum"></a>1.删除现有的Python和yum</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa|grep python|xargs rpm -ev --allmatches --nodeps ##强制删除已安装程序及其关联</span><br><span class="line">whereis python |xargs rm -frv ##删除所有残余文件 ##xargs，允许你对输出执行其他某些命令</span><br><span class="line">whereis python ##验证删除，返回无结果</span><br><span class="line"></span><br><span class="line">rpm -qa|grep yum|xargs rpm -ev --allmatches --nodeps ##强制删除yum</span><br><span class="line">whereis yum |xargs rm -frv ##删除所有残余文件</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/06/12/%E9%87%8D%E8%A3%85Python2-7-yum/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/12/%E9%87%8D%E8%A3%85Python2-7-yum/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Docker安装MongoDB" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/15/Docker%E5%AE%89%E8%A3%85MongoDB/">Docker安装MongoDB</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/15/Docker%E5%AE%89%E8%A3%85MongoDB/" class="archive-article-date">
-  	<time datetime="2019-05-15T08:19:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-安装镜像"><a href="#1-安装镜像" class="headerlink" title="1. 安装镜像"></a>1. 安装镜像</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker pull mongo</span><br><span class="line"></span><br><span class="line">docker images</span><br><span class="line">REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">docker.io/mongo                            latest              d98005b752b4        8 days ago          411 MB</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/05/15/Docker%E5%AE%89%E8%A3%85MongoDB/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/15/Docker%E5%AE%89%E8%A3%85MongoDB/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1563,8 +918,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
