@@ -15,18 +15,18 @@
 <meta property="og:site_name" content="咕咕子的博客">
 <meta property="og:description" content="一、创建Eureka服务中心Server端1. 创建Module命名为eureka_server_0X并添加相应包">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//1576990803556.png">
-<meta property="og:image" content="http://yoursite.com/.com//1576990856946.png">
-<meta property="og:image" content="http://yoursite.com/.com//1576991585639.png">
-<meta property="og:image" content="http://yoursite.com/.com//1576991667231.png">
-<meta property="og:image" content="http://yoursite.com/.com//1576991845640.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576990803556.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576990856946.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576991585639.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576991667231.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576991845640.png">
 <meta property="article:published_time" content="2019-12-14T05:06:37.000Z">
 <meta property="article:modified_time" content="2019-12-22T05:21:46.000Z">
 <meta property="article:author" content="咕咕子">
 <meta property="article:tag" content="Spring">
 <meta property="article:tag" content="Eureka">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//1576990803556.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576990803556.png">
   
     <link rel="alternative" href="/atom.xml" title="咕咕子的博客" type="application/atom+xml">
   
@@ -184,9 +184,9 @@
       
         <h2 id="一、创建Eureka服务中心Server端"><a href="#一、创建Eureka服务中心Server端" class="headerlink" title="一、创建Eureka服务中心Server端"></a>一、创建Eureka服务中心Server端</h2><h3 id="1-创建Module命名为eureka-server-0X并添加相应包"><a href="#1-创建Module命名为eureka-server-0X并添加相应包" class="headerlink" title="1. 创建Module命名为eureka_server_0X并添加相应包"></a>1. 创建Module命名为eureka_server_0X并添加相应包</h3><a id="more"></a>
 
-<p><img src="/.com//1576990803556.png" alt="1576990803556"></p>
+<p><img src="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576990803556.png" alt="1576990803556"></p>
 <p>添加Eureka Server包</p>
-<p><img src="/.com//1576990856946.png" alt="1576990856946"></p>
+<p><img src="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576990856946.png" alt="1576990856946"></p>
 <h3 id="2-在启动类上添加注解-EnableEurekaServer"><a href="#2-在启动类上添加注解-EnableEurekaServer" class="headerlink" title="2. 在启动类上添加注解 @EnableEurekaServer"></a>2. 在启动类上添加注解 @EnableEurekaServer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaServer01Application</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(EurekaServer01Application<span class="class">.<span class="keyword">class</span>, <span class="title">args</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-添加配置application-yml"><a href="#3-添加配置application-yml" class="headerlink" title="3. 添加配置application.yml"></a>3. 添加配置application.yml</h3><p>在host文件中添加三个模拟地址</p>
@@ -200,13 +200,13 @@
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: <span class="number">8763</span></span><br><span class="line"></span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: eureka-server</span><br><span class="line"></span><br><span class="line">eureka:</span><br><span class="line">  instance:</span><br><span class="line">    instance-id: $&#123;spring.application.name&#125;:$&#123;server.port&#125;-<span class="number">03</span></span><br><span class="line"></span><br><span class="line">  client:</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="二、创建Eureka服务中心Client端"><a href="#二、创建Eureka服务中心Client端" class="headerlink" title="二、创建Eureka服务中心Client端"></a>二、创建Eureka服务中心Client端</h2><h3 id="1-创建Module命名为eureka-client-0X并添加相应包"><a href="#1-创建Module命名为eureka-client-0X并添加相应包" class="headerlink" title="1. 创建Module命名为eureka_client_0X并添加相应包"></a>1. 创建Module命名为eureka_client_0X并添加相应包</h3><p><img src="/.com//1576991585639.png" alt="1576991585639"></p>
+<h2 id="二、创建Eureka服务中心Client端"><a href="#二、创建Eureka服务中心Client端" class="headerlink" title="二、创建Eureka服务中心Client端"></a>二、创建Eureka服务中心Client端</h2><h3 id="1-创建Module命名为eureka-client-0X并添加相应包"><a href="#1-创建Module命名为eureka-client-0X并添加相应包" class="headerlink" title="1. 创建Module命名为eureka_client_0X并添加相应包"></a>1. 创建Module命名为eureka_client_0X并添加相应包</h3><p><img src="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576991585639.png" alt="1576991585639"></p>
 <p>添加Web包和Eureka Discovery Client包</p>
-<p><img src="/.com//1576991667231.png" alt="1576991667231"></p>
+<p><img src="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576991667231.png" alt="1576991667231"></p>
 <h3 id="2-添加配置application-yml"><a href="#2-添加配置application-yml" class="headerlink" title="2. 添加配置application.yml"></a>2. 添加配置application.yml</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: <span class="number">8080</span></span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: eureka_client_01</span><br><span class="line"></span><br><span class="line">eureka:</span><br><span class="line">  instance:</span><br><span class="line">    instance-id: $&#123;spring.application.name&#125;:$&#123;server.port&#125;-<span class="number">01</span></span><br><span class="line"></span><br><span class="line">  client:</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="3-查看以注册的服务"><a href="#3-查看以注册的服务" class="headerlink" title="3. 查看以注册的服务"></a>3. 查看以注册的服务</h3><p>访问<a href="http://peer1:8761/、http://peer2:8762/、http://peer3:8763/中任意一个即可" target="_blank" rel="noopener">http://peer1:8761/、http://peer2:8762/、http://peer3:8763/中任意一个即可</a></p>
-<p><img src="/.com//1576991845640.png" alt="1576991845640"></p>
+<p><img src="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/1576991845640.png" alt="1576991845640"></p>
 
       
 
@@ -431,11 +431,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
