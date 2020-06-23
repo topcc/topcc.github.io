@@ -15,15 +15,15 @@
 <meta property="og:site_name" content="咕咕子的博客">
 <meta property="og:description" content="Eureka-server对外提供Restful的服务，只要利用这些Restful我们就能对项目实现注册和发现。Eureka已经帮我使用java写了client，让我的项目只要依赖client就能实现注册和发现。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1577001328412.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1577004606615.png">
+<meta property="og:image" content="http://yoursite.com/.com//1577001328412.png">
+<meta property="og:image" content="http://yoursite.com/.com//1577004606615.png">
 <meta property="article:published_time" content="2019-12-22T07:37:14.000Z">
 <meta property="article:modified_time" content="2020-06-23T05:04:44.258Z">
 <meta property="article:author" content="咕咕子">
 <meta property="article:tag" content="Spring">
 <meta property="article:tag" content="Eureka">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/12/22/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1577001328412.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//1577001328412.png">
   
     <link rel="alternative" href="/atom.xml" title="咕咕子的博客" type="application/atom+xml">
   
@@ -183,7 +183,7 @@
 <a id="more"></a>
 
 <h2 id="一、eureka-client会做啥"><a href="#一、eureka-client会做啥" class="headerlink" title="一、eureka-client会做啥"></a>一、eureka-client会做啥</h2><p>很多关键代码在eureka-client-1.9.13.jar里面（版本可能不同），主要关注DiscoveryClient.class，这个类完成了大部分功能。</p>
-<p><img src="Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1577001328412.png" alt="1577004658266"></p>
+<p><img src="/.com//1577001328412.png" alt="1577004658266"></p>
 <p><code>register()</code>实现了client端的注册。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">register</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"DiscoveryClient_&#123;&#125;: registering service..."</span>, <span class="keyword">this</span>.appPathIdentifier);</span><br><span class="line"></span><br><span class="line">        EurekaHttpResponse httpResponse;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            httpResponse = <span class="keyword">this</span>.eurekaTransport.registrationClient.register(<span class="keyword">this</span>.instanceInfo);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception var3) &#123;</span><br><span class="line">            logger.warn(<span class="string">"DiscoveryClient_&#123;&#125; - registration failed &#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.appPathIdentifier, var3.getMessage(), var3&#125;);</span><br><span class="line">            <span class="keyword">throw</span> var3;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">            logger.info(<span class="string">"DiscoveryClient_&#123;&#125; - registration status: &#123;&#125;"</span>, <span class="keyword">this</span>.appPathIdentifier, httpResponse.getStatusCode());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> httpResponse.getStatusCode() == Status.NO_CONTENT.getStatusCode();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
@@ -192,7 +192,7 @@
 
 <p>底层对server端发起了Post请求，Eureka会处理请求。</p>
 <h2 id="二、eureka-server会做啥"><a href="#二、eureka-server会做啥" class="headerlink" title="二、eureka-server会做啥"></a>二、eureka-server会做啥</h2><p>很多关键代码在eureka-server.jar里面，主要关注InstanceRegistry.class，这个类完成了大部分功能。</p>
-<p><img src="Eureka%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1577004606615.png" alt="1577004606615"></p>
+<p><img src="/.com//1577004606615.png" alt="1577004606615"></p>
 <p>接受注册信息时，会先进入<code>register()</code>方法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(<span class="keyword">final</span> InstanceInfo info, <span class="keyword">final</span> <span class="keyword">boolean</span> isReplication)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.handleRegistration(info, <span class="keyword">this</span>.resolveInstanceLeaseDuration(info), isReplication);</span><br><span class="line">        <span class="keyword">super</span>.register(info, isReplication);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
@@ -297,6 +297,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2020/06/23/Java%E5%9F%BA%E7%A1%80/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Java基础
+        
+      </div>
+    </a>
   
   
     <a href="/2019/12/14/%E6%90%AD%E5%BB%BAEureka%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4/" id="article-nav-older" class="article-nav-link-wrap">
@@ -426,11 +435,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -447,6 +456,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">面试</a>
               </li>
              
               <li class="article-tag-list-item">
